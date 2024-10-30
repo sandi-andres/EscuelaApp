@@ -1,7 +1,11 @@
+using EscuelaApp.Persistencia;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//llamar metodo que inyecta nuestras dependencias
+InyectarDependencias.ConfiguracionServicios(builder.Services); //builder.Services contiene coleccion de todas nuestras inyecciones
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
