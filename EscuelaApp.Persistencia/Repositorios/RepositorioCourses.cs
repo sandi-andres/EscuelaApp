@@ -18,15 +18,30 @@ namespace EscuelaApp.Persistencia.Repositorios
             _context = context;
         }
 
-        public Task<int> eliminar(int courseId)
+        public Task<int> eliminar(Course course)
         {
-            throw new NotImplementedException();
+            
+            _context.Courses.Remove(course);
+            return _context.SaveChangesAsync();
+
         }
 
         public Task<int> insertar(Course curso)
         {
-            _context.Add(curso);
-             return _context.SaveChangesAsync();
+            //validar que el ID no esta guardado es una tarea de repositorio, no de controlador
+            var c =  obtenerCursoPorID(curso.CourseId);
+
+            if (curso == null)
+            {
+                _context.Add(curso);
+                var res =  _context.SaveChangesAsync();
+                return res;
+            }
+            else
+            {
+                return Task.FromResult(3); //para camuflar el int como tarea, esta funcion hace una tarea y devuelve el parametro como tarea
+            }
+
         }
 
         public Task<int> modificar(Course curso)

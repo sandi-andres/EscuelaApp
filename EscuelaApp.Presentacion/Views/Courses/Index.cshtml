@@ -4,6 +4,26 @@
     ViewData["Title"] = "Catálogo Cursos";
 }
 
+<!--
+    Ejemplo Create
+-->
+@if (TempData["Mensaje"]!= null)
+{
+    <div class="alert @TempData["TipoMensaje"]" role="alert">
+        @TempData["Mensaje"]
+    </div>
+}
+
+<!--
+    Ejemplo Insert y Delete
+-->
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert @ViewBag.TipoMensaje" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
 <h1>Index</h1>
 
 <p>

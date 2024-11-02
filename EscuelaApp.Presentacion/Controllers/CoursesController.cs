@@ -13,15 +13,15 @@ namespace EscuelaApp.Presentacion.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly SchoolDBContext _context;
         private readonly ICourses _repCourse; //inyeccion de dependencias reporsitorio
+        private readonly IDepartments _repDepartment; 
 
-
-        public CoursesController(SchoolDBContext context,
-                                    ICourses repCourse)
+        //EL CONTROLADOR NO DEBE TENER INYECCION DE DEPENDENCIAS DEL DB CONTEXT
+        public CoursesController(ICourses repCourse,
+            IDepartments repDepartment)
         {
-            _context = context;
             _repCourse = repCourse;
+            _repDepartment = repDepartment;
         }
 
         // GET: Courses
@@ -44,9 +44,9 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name");
             return View();
         }
 
@@ -57,12 +57,31 @@ namespace EscuelaApp.Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CourseId,Title,Credits,DepartmentId")] Course course)
         {
+            int res = 0;
+
             if (ModelState.IsValid)
             {
-                int res = await _repCourse.insertar(course);
-                return RedirectToAction(nameof(Index));
+                res = await _repCourse.insertar(course);                           
+                
+                if (res == 1)
+                {
+                    TempData["Mensaje"] = "Curso Guardado Correctamente";
+                    TempData["TipoMensaje"] = "alert-primary";
+                }
+                else if(res == 3)
+                {
+                    TempData["Mensaje"] = $"Error: El ID {course.CourseId} ya está registrado.";
+                    TempData["TipoMensaje"] = "alert-danger";
+                }
+                else
+                {
+                    TempData["Mensaje"] = "Error: Curso no se ha guardado";
+                    TempData["TipoMensaje"] = "alert-danger";
+                }
+                //RedirectToAction no sirve con viewbag o viewdata, se debe usar tempdata
+                return RedirectToAction(nameof(Index)); //RedirectToAction llama la accion desde el controlador, return View es directamente a la vista
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
 
@@ -74,7 +93,7 @@ namespace EscuelaApp.Presentacion.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
 
@@ -92,38 +111,32 @@ namespace EscuelaApp.Presentacion.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                int res = await _repCourse.modificar(course);
+
+                if (res == 1)
                 {
-                    int res = await _repCourse.modificar(course);
+                    ViewBag.Mensaje = "Curso Guardado Correctamente";
+                    ViewBag.TipoMensaje = "alert-primary";
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CourseExists(course.CourseId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ViewBag.Mensaje = "Error: No se pudo modificar el curso";
+                    ViewBag.TipoMensaje = "alert-danger";
                 }
-                return RedirectToAction(nameof(Index));
+                //con view() se puede usar viewbag y viewdata, pero se debe especificar la vista
+                //si no, se ira a la vista con el nombre de la accion 
+                //el segundo parametro es el modelo que recibira la vista
+                return View("Index", await _repCourse.obtenerTodo());
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "Name", course.DepartmentId);
+            ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name", course.DepartmentId);
             return View(course);
         }
 
         // GET: Courses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var course = await _repCourse.obtenerCursoPorID(id);
 
-            var course = await _context.Courses
-                .Include(c => c.Department)
-                .FirstOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
                 return NotFound();
@@ -137,19 +150,26 @@ namespace EscuelaApp.Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _repCourse.obtenerCursoPorID(id);
+            
             if (course != null)
             {
-                _context.Courses.Remove(course);
+                int res = await _repCourse.eliminar(course);
+                if (res == 1)
+                {
+                    ViewBag.Mensaje = "Curso Eliminado Correctamente";
+                    ViewBag.TipoMensaje = "alert-primary";
+                }
+
+                else
+                {
+                    ViewBag.Mensaje = "Error: No se pudo eliminar el curso";
+                    ViewBag.TipoMensaje = "alert-danger";
+                }
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool CourseExists(int id)
-        {
-            return _context.Courses.Any(e => e.CourseId == id);
+            return View("Index", await _repCourse.obtenerTodo());
         }
     }
 }
