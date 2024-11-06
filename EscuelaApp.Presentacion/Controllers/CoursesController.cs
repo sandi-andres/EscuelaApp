@@ -28,12 +28,15 @@ namespace EscuelaApp.Presentacion.Controllers
         public async Task<IActionResult> Index()
         {
             ////usamos el reporsitorio que ya fue inyectado en el controlador
+            
+            ///TODO: Cambiar a utilizar API
             return View(await _repCourse.obtenerTodo());
         }
 
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int id)
         {
+            ///TODO: Cambiar a utilizar API
             var course = await _repCourse.obtenerCursoPorID(id);
             if (course == null)
             {
@@ -61,6 +64,7 @@ namespace EscuelaApp.Presentacion.Controllers
 
             if (ModelState.IsValid)
             {
+                //TODO: CAMBIAR A API
                 res = await _repCourse.insertar(course);                           
                 
                 if (res == 1)
@@ -111,6 +115,7 @@ namespace EscuelaApp.Presentacion.Controllers
 
             if (ModelState.IsValid)
             {
+                //TODO: CAMBIAR A API
                 int res = await _repCourse.modificar(course);
 
                 if (res == 1)
@@ -154,6 +159,7 @@ namespace EscuelaApp.Presentacion.Controllers
             
             if (course != null)
             {
+                //TODO: CAMBIAR A API
                 int res = await _repCourse.eliminar(course);
                 if (res == 1)
                 {

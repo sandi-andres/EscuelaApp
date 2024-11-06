@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructura", "Infraest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentacion", "Presentacion", "{5558865E-B5A2-4D1C-BA2D-EFE8BFAC6417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscuelaApp.Dominio", "EscuelaApp.Dominio\EscuelaApp.Dominio.csproj", "{378906AC-5D23-4E50-8E58-828356E0E513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EscuelaApp.Dominio", "EscuelaApp.Dominio\EscuelaApp.Dominio.csproj", "{378906AC-5D23-4E50-8E58-828356E0E513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscuelaApp.Persistencia", "EscuelaApp.Persistencia\EscuelaApp.Persistencia.csproj", "{B6F80712-2057-4487-9503-5E44EA274002}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EscuelaApp.Persistencia", "EscuelaApp.Persistencia\EscuelaApp.Persistencia.csproj", "{B6F80712-2057-4487-9503-5E44EA274002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscuelaApp.API", "EscuelaApp.API\EscuelaApp.API.csproj", "{0F26095A-72D6-45F0-8DC4-0FE0C0D420C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EscuelaApp.API", "EscuelaApp.API\EscuelaApp.API.csproj", "{0F26095A-72D6-45F0-8DC4-0FE0C0D420C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscuelaApp.Presentacion", "EscuelaApp.Presentacion\EscuelaApp.Presentacion.csproj", "{A5F3FEFE-7E33-41D8-B85B-A14373992334}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EscuelaApp.Presentacion", "EscuelaApp.Presentacion\EscuelaApp.Presentacion.csproj", "{A5F3FEFE-7E33-41D8-B85B-A14373992334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

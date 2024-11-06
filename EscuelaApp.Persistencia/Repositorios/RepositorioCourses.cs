@@ -29,18 +29,18 @@ namespace EscuelaApp.Persistencia.Repositorios
         public async Task<int> insertar(Course curso)
         {
             //validar que el ID no esta guardado es una tarea de repositorio, no de controlador
-            var c =  obtenerCursoPorID(curso.CourseId);
+            //var c =  obtenerCursoPorID(curso.CourseId);
 
-            if (curso == null)
-            {
+            //if (curso == null)
+            //{
                 _context.Add(curso);
                 var res =  _context.SaveChangesAsync();
                 return await res;
-            }
-            else
-            {
-                return await Task.FromResult(3); //para camuflar el int como tarea, esta funcion hace una tarea y devuelve el parametro como tarea
-            }
+            //}
+            //else
+            //{
+            //    return await Task.FromResult(3); //para camuflar el int como tarea, esta funcion hace una tarea y devuelve el parametro como tarea
+            //}
 
         }
 
