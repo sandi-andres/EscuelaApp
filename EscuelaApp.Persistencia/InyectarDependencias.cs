@@ -33,6 +33,7 @@ namespace EscuelaApp.Persistencia
             //una interfaz solo se vincula a un repositorio
             servicios.AddScoped<ICourses, RepositorioCourses>(); //metodo para inyectar, se usa en Program.cs
             servicios.AddScoped<IDepartments, RepositorioDepartments>();
+            servicios.AddScoped<IPerson, RepositorioPerson>();  
         }
     }
 }

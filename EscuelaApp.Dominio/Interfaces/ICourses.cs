@@ -26,6 +26,14 @@ namespace EscuelaApp.Dominio.Interfaces
 
         //Consultar Todo
         public Task<List<Course>> obtenerTodo();
-        
+
+        //buscar por nombre completo
+        public Task<Course?> obtenerCursoPorNombre(String courseName);
+
+        public Task<int> getTotalCreditos();
+
+        //obtener el total de creditos por departamento
+        ////public Task<int> getTotalCreditosPorDept();
+
     }
 }

@@ -27,7 +27,7 @@ namespace EscuelaApp.API.Controllers
             //TODO: verificar por que da error de json cuando se retorne la lista
             var res = await _repCourse.obtenerTodo();
             
-            return Ok(new {resultado = "1"});
+            return Ok(new {resultado = res});
         }
 
         // GET api/obtenerPorId/5
@@ -60,6 +60,24 @@ namespace EscuelaApp.API.Controllers
         public async Task<ActionResult> BorrarCurso([FromBody] Course course)
         {
             return Ok(new { resultado = await _repCourse.eliminar(course) });
+        }
+
+        //buscar por nombre de curso
+
+        // GET api/ObtenerPorNombre
+        [HttpGet]
+        [Route("ObtenerPorNombre")]
+        public async Task<ActionResult> ObtenerPorNombre(String courseName)
+        {
+            return StatusCode(200, new { resultado = await _repCourse.obtenerCursoPorNombre(courseName) });
+        }
+
+        // GET api/ObtenerTotalCredtiso
+        [HttpGet]
+        [Route("ObtenerTotalCredtiso")]
+        public async Task<ActionResult> ObtenerTotalCredtiso()
+        {
+            return StatusCode(200, new { resultado = await _repCourse.getTotalCreditos() });
         }
     }
 }

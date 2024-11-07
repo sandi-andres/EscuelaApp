@@ -19,11 +19,10 @@ namespace EscuelaApp.Persistencia.Repositorios
         }
 
         public Task<int> eliminar(Course course)
-        {
-            
+        {            
             _context.Courses.Remove(course);
-            return _context.SaveChangesAsync();
 
+            return _context.SaveChangesAsync();
         }
 
         public async Task<int> insertar(Course curso)
@@ -59,7 +58,44 @@ namespace EscuelaApp.Persistencia.Repositorios
 
         public Task<List<Course>> obtenerTodo()
         {
-            return _context.Courses.Include(c => c.Department).ToListAsync();
+            return _context.Courses
+                .Include(c => c.Department)
+                //ordenar por titulo
+                .OrderBy(c => c.Credits)
+                //ordenamiento secundario
+                .ThenBy(c => c.Title) 
+                //.OrderByDescending(c => c.Title)
+                //.ThenByDescending ordenamiento secundario descendiente
+                .Take(1) //TOP de SQL, en este caso solo devuelve el primero
+                .ToListAsync();
         }
+
+        //buscar por nombre completo de curso
+        public Task<Course?> obtenerCursoPorNombre(string courseName)
+        {
+            return _context.Courses
+                .Include(d => d.Department)
+                .FirstOrDefaultAsync(m => m.Title == courseName);
+        }
+        
+        //obtener el total de creditos de todos los cursos
+        public Task<int> getTotalCreditos()
+        {
+            return _context.Courses.SumAsync(c => c.Credits);
+        }
+
+        //agrupacion
+        /*public Task<List<Object>> getTotalCreditosPorDept()
+        {
+            var res =  _context.Courses
+                .GroupBy(c => c.Department)
+                .Select(group => new
+                {
+                    Departamento = group.Key,
+                    TotalCreditos = group.Sum(c => c.Credits)
+                }).ToListAsync();
+
+            return res;
+         }*/
     }
 }
