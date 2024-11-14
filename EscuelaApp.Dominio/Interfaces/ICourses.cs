@@ -1,9 +1,11 @@
-﻿using EscuelaApp.Persistencia.Data;
+﻿using EscuelaApp.Dominio.Entidades;
+using EscuelaApp.Persistencia.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EscuelaApp.Dominio.Interfaces
 {
@@ -28,12 +30,20 @@ namespace EscuelaApp.Dominio.Interfaces
         public Task<List<Course>> obtenerTodo();
 
         //buscar por nombre completo
-        public Task<Course?> obtenerCursoPorNombre(String courseName);
+        public Task<Course?> obtenerCursoPorNombre(string courseName);
 
         public Task<int> getTotalCreditos();
 
         //obtener el total de creditos por departamento
-        ////public Task<int> getTotalCreditosPorDept();
+        //public Task<int> getTotalCreditosPorDept();
 
+        //Laboratorio Punto 4. Obtener el promedio de créditos de los cursos.
+        public Task<double> obtenerPromedioCreditos();
+
+        //Laboratorio Punto 5. Obtener el numero de docentes que tiene cada curso. 
+        //public Task<List<PersonasPorCurso>> obtenerDocentesPorCurso();
+
+        //Laboratorio Punto 7. Obtener el numero de estudiantes inscritos en cada curso
+        //public Task<List<PersonasPorCurso>> obteneEstudiantesCursos();
     }
 }

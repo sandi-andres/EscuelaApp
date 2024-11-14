@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using EscuelaApp.Persistencia.Data;
 using EscuelaApp.Persistencia.Repositorios;
 using EscuelaApp.Dominio.Interfaces;
+using static System.Net.WebRequestMethods;
+using EscuelaApp.Dominio.Dto;
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace EscuelaApp.Presentacion.Controllers
 {
@@ -15,28 +20,45 @@ namespace EscuelaApp.Presentacion.Controllers
     {
         private readonly ICourses _repCourse; //inyeccion de dependencias reporsitorio
         private readonly IDepartments _repDepartment; 
+        private readonly HttpClient _httpClient;
 
         //EL CONTROLADOR NO DEBE TENER INYECCION DE DEPENDENCIAS DEL DB CONTEXT
         public CoursesController(ICourses repCourse,
-            IDepartments repDepartment)
+            IDepartments repDepartment,
+            HttpClient httpClient)
         {
             _repCourse = repCourse;
             _repDepartment = repDepartment;
+            _httpClient = httpClient;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            ////usamos el reporsitorio que ya fue inyectado en el controlador
-            
-            ///TODO: Cambiar a utilizar API
-            return View(await _repCourse.obtenerTodo());
+            string url = "http://localhost:5166/api/Course/ObtenerTodo";
+
+            //realizar la peticion, await y async para que se espere la respuesta
+            HttpResponseMessage respuesta = await _httpClient.GetAsync(url);
+
+            //verificar si el resultado de la peticion es exitosa (codigo 200)
+            if (respuesta.IsSuccessStatusCode)
+            {
+                //deserializar los datos de jason a objeto
+                List<CourseDTO> cursos = await respuesta.Content.ReadFromJsonAsync<List<CourseDTO>>();
+
+                return View(cursos);
+            }
+            else
+            {
+                StatusCode((int)respuesta.StatusCode, "Error al obtener datos del curso");
+                return View();
+            }
         }
 
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            ///TODO: Cambiar a utilizar API
+            //TODO: Cambiar a utilizar API
             var course = await _repCourse.obtenerCursoPorID(id);
             if (course == null)
             {
@@ -64,9 +86,21 @@ namespace EscuelaApp.Presentacion.Controllers
 
             if (ModelState.IsValid)
             {
-                //TODO: CAMBIAR A API
-                res = await _repCourse.insertar(course);                           
+                string url = "http://localhost:5166/api/Course/GuardarCurso";
                 
+                string jsonData = JsonConvert.SerializeObject(course);
+
+                HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/Json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string resultado = await response.Content.ReadFromJsonAsync<string>();
+                }
+                
+                //res = await _repCourse.insertar(course);                           
+
                 if (res == 1)
                 {
                     TempData["Mensaje"] = "Curso Guardado Correctamente";

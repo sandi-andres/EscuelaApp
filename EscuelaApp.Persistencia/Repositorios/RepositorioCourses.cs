@@ -1,4 +1,5 @@
-﻿using EscuelaApp.Dominio.Interfaces;
+﻿using EscuelaApp.Dominio.Entidades;
+using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -55,7 +56,6 @@ namespace EscuelaApp.Persistencia.Repositorios
                 .Include(c => c.Department)
                 .FirstOrDefaultAsync(m => m.CourseId == courseId);
         }
-
         public Task<List<Course>> obtenerTodo()
         {
             return _context.Courses
@@ -66,7 +66,7 @@ namespace EscuelaApp.Persistencia.Repositorios
                 .ThenBy(c => c.Title) 
                 //.OrderByDescending(c => c.Title)
                 //.ThenByDescending ordenamiento secundario descendiente
-                .Take(1) //TOP de SQL, en este caso solo devuelve el primero
+                //.Take(1) //TOP de SQL, en este caso solo devuelve el primero
                 .ToListAsync();
         }
 
@@ -97,5 +97,43 @@ namespace EscuelaApp.Persistencia.Repositorios
 
             return res;
          }*/
+
+        //Laboratorio Punto 4. Obtener el promedio de créditos de los cursos.
+
+        public Task<double> obtenerPromedioCreditos()
+        {
+            var res = _context.Courses
+                .Average(c => c.Credits);
+
+            return Task.FromResult(res);
+        }
+        
+        //Laboratorio Punto 5. Obtener el numero de docentes que tiene cada curso. 
+        /*public Task<List<PersonasPorCurso>> obtenerDocentesPorCurso()
+        {
+            var res = _context.People
+                .GroupBy(c => c.Courses)
+                .Select(group => new PersonasPorCurso
+                {
+                    Curso = group.Key,
+                    TotalPersonas = group.Count(c => c.Discriminator.Equals("Instructor"))
+                }).ToListAsync();
+
+            return res;
+        }*/
+
+        //Laboratorio Punto 7. Obtener el numero de estudiantes inscritos en cada curso
+        /*public Task<List<PersonasPorCurso>> obteneEstudiantesCursos()
+        {
+            var res = _context.People
+                .GroupBy(c => c.Courses)
+                .Select(group => new PersonasPorCurso
+                {
+                    Curso = group.Key,
+                    TotalPersonas = group.Count(c => c.Discriminator.Equals("Student"))
+                }).ToListAsync();
+
+            return res;
+        }*/
     }
 }

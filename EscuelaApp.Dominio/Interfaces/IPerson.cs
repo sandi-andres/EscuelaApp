@@ -11,5 +11,6 @@ namespace EscuelaApp.Dominio.Interfaces
     {
         //obtener estudiantes aprobados
         public Task<List<Person>> obtenerEstudiantesAprobados();
+
     }
 }

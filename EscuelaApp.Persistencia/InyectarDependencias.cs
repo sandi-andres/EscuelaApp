@@ -34,6 +34,7 @@ namespace EscuelaApp.Persistencia
             servicios.AddScoped<ICourses, RepositorioCourses>(); //metodo para inyectar, se usa en Program.cs
             servicios.AddScoped<IDepartments, RepositorioDepartments>();
             servicios.AddScoped<IPerson, RepositorioPerson>();  
+            servicios.AddScoped<IStudentGrades, RepositorioStudentGrades>();    
         }
     }
 }

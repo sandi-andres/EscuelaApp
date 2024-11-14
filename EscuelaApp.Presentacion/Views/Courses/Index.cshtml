@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EscuelaApp.Persistencia.Data.Course>
+﻿@model IEnumerable<EscuelaApp.Dominio.Dto.CourseDTO>
 
 @{
     ViewData["Title"] = "Catálogo Cursos";
@@ -39,29 +39,15 @@
                 @Html.DisplayNameFor(model => model.Credits)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                @Html.DisplayNameFor(model => model.NombreDepartamento)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.Name)
-            </td>
-            <td>
-                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.CourseId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseId">Detalles</a> |
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CourseId">Eliminar</a>
-            </td>
-        </tr>
+        
+    @await Html.PartialAsync("_Fila",item)
 }
     </tbody>
 </table>

@@ -1,0 +1,19 @@
+﻿@using EscuelaApp.Dominio.Dto
+@model CourseDTO
+
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Credits)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.NombreDepartamento)
+    </td>
+    <td>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.CourseId">Editar</a> |
+        <a asp-action="Details" asp-route-id="@Model.CourseId">Detalles</a> |
+        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.CourseId">Eliminar</a>
+    </td>
+</tr>

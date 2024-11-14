@@ -95,6 +95,5 @@ namespace EscuelaApp.API.Controllers
             return Ok(new {resultado = res});
         }
 
-        //Obtener los estudiantes aprobados en un curso dado
     }
 }

@@ -26,6 +26,6 @@ namespace EscuelaApp.Persistencia.Repositorios
                 .Where(p => p.StudentGrades.Any(g => g.Grade >= 3)) //de 3 o mas
                 .Distinct() //remover duplicados
                 .ToListAsync();
-        }
+        }        
     }
 }

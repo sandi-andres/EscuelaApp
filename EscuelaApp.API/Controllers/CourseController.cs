@@ -1,7 +1,8 @@
-﻿using EscuelaApp.Dominio.Interfaces;
+﻿using EscuelaApp.Dominio.Dto;
+using EscuelaApp.Dominio.Interfaces;
 using EscuelaApp.Persistencia.Data;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json; //se debe instalar el nugget Newtonsoft.Json
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,9 +26,25 @@ namespace EscuelaApp.API.Controllers
         public async Task<ActionResult> ObtenerTodo()
         {
             //TODO: verificar por que da error de json cuando se retorne la lista
+            //var res = await _repCourse.obtenerTodo();
+
+            //return Ok(new {resultado = res});
+
             var res = await _repCourse.obtenerTodo();
-            
-            return Ok(new {resultado = res});
+
+
+            var cursosDTO = res.Select(c => new CourseDTO
+            {
+                CourseId = c.CourseId,
+                Title = c.Title,
+                Credits = c.Credits,
+                DepartmentId = c.DepartmentId,
+                NombreDepartamento = c.Department.Name
+            }).ToList();
+
+            var jsonRes = JsonConvert.SerializeObject(cursosDTO);
+
+            return Content(jsonRes, "application/json");
         }
 
         // GET api/obtenerPorId/5
@@ -51,6 +68,7 @@ namespace EscuelaApp.API.Controllers
         [Route("ActualizarCurso")]
         public async Task<ActionResult> ActualizarCurso(int id, [FromBody] Course course)
         {
+
             return Ok(new { resultado = await _repCourse.modificar(course) });
         }
 
@@ -78,6 +96,15 @@ namespace EscuelaApp.API.Controllers
         public async Task<ActionResult> ObtenerTotalCredtiso()
         {
             return StatusCode(200, new { resultado = await _repCourse.getTotalCreditos() });
+        }
+
+
+        //Laboratorio Punto 4. Obtener el promedio de créditos de los cursos.
+        [HttpGet]
+        [Route("ObtenerPromedioCreditos")]
+        public async Task<ActionResult> ObtenerPromedioCreditos()
+        {
+            return StatusCode(200, new { resultado = await _repCourse.obtenerPromedioCreditos() });
         }
     }
 }
