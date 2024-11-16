@@ -26,7 +26,11 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Catálogo Cursos</a>
+                            @if (ViewBag.Role == "administrador")
+                            {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Catálogo Cursos</a>
+                            }
+                            
                         </li>
                     </ul>
                 </div>
@@ -35,6 +39,8 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <p>@ViewBag.nombre</p>
+            <p>@ViewBag.role</p>
             @RenderBody()
         </main>
     </div>

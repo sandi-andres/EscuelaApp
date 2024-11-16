@@ -13,6 +13,7 @@ using EscuelaApp.Dominio.Dto;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EscuelaApp.Presentacion.Controllers
 {
@@ -33,6 +34,9 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses
+        [HttpGet]
+        //[Authorize]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> Index()
         {
             string url = "http://localhost:5166/api/Course/ObtenerTodo";
@@ -56,6 +60,8 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Details/5
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             //TODO: Cambiar a utilizar API
@@ -69,6 +75,8 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Create
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             ViewData["DepartmentId"] = new SelectList(await _repDepartment.obtenerTodo(), "DepartmentId", "Name");
@@ -79,6 +87,7 @@ namespace EscuelaApp.Presentacion.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CourseId,Title,Credits,DepartmentId")] Course course)
         {
@@ -124,6 +133,8 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Edit/5
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
             var course = await _repCourse.obtenerCursoPorID(id);
@@ -139,6 +150,7 @@ namespace EscuelaApp.Presentacion.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CourseId,Title,Credits,DepartmentId")] Course course)
         {
@@ -172,6 +184,8 @@ namespace EscuelaApp.Presentacion.Controllers
         }
 
         // GET: Courses/Delete/5
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var course = await _repCourse.obtenerCursoPorID(id);
@@ -186,6 +200,7 @@ namespace EscuelaApp.Presentacion.Controllers
 
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
